@@ -1,0 +1,5 @@
+﻿ClassId;PropertyId;PropertyName;PropertyType
+1;1;Color;string
+1;2;Length;int
+2;1;Name;string
+2;2;Age;int

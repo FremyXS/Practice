@@ -1,0 +1,7 @@
+﻿ClassId;ObjectId;PropertyId;PropertyValue
+1;MyCrocodile;1;green
+1;MyCrocodile;2;150
+2;Ivan;1;Ivan
+2;Ivan;2;20
+2;AnotherHuman;1;Oleg
+2;AnotherHuman;2;18
