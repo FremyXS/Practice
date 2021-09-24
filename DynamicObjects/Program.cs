@@ -57,7 +57,7 @@ namespace DynamicObjects
     {
         public TypeObject Type { get; }
         public string ObjectId { get; }
-        public List<ValueProperty> Values { get; private set; } = new List<ValueProperty>();
+        public List<ValueProperty<object>> Values { get; private set; } = new List<ValueProperty<object>>();
         public Object(TypeObject type, string objectId)
         {
             Type = type;
@@ -82,13 +82,33 @@ namespace DynamicObjects
             AddValue(oneObject, Objects.Single(el => el.ObjectId == oneObject[1]));
         }
         private static void AddValue(string[] oneObject, Object @object)
-            => @object.Values.Add(new ValueProperty(@object.Type.Properties.Single(el => el.PropertyId == int.Parse(oneObject[2])), oneObject[3]));
+        {
+            switch (@object.Type.Properties.Single(el => el.PropertyId == int.Parse(oneObject[2])).PropertyType)
+            {
+                case "int":
+                    @object.Values.Add(new ValueProperty<object>(@object.Type.Properties
+                        .Single(el => el.PropertyId == int.Parse(oneObject[2])), int.Parse(oneObject[3])));
+                    break;
+                case "string":
+                    @object.Values.Add(new ValueProperty<object>(@object.Type.Properties
+                        .Single(el => el.PropertyId == int.Parse(oneObject[2])), oneObject[3]));
+                    break;
+                case "bool":
+                    @object.Values.Add(new ValueProperty<object>(@object.Type.Properties
+                        .Single(el => el.PropertyId == int.Parse(oneObject[2])), bool.Parse(oneObject[3])));
+                    break;
+                case "double":
+                    @object.Values.Add(new ValueProperty<object>(@object.Type.Properties
+                        .Single(el => el.PropertyId == int.Parse(oneObject[2])), double.Parse(oneObject[3].Replace('.', ','))));
+                    break;
+            }
+        }
     }
-    public class ValueProperty
+    public class ValueProperty<T>
     {
         public Property Property { get; }
-        public string Value { get; }
-        public ValueProperty(Property property, string value)
+        public T Value { get; }
+        public ValueProperty(Property property, T value)
         {
             Property = property;
             Value = value;
